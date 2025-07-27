@@ -12,6 +12,14 @@ enum ZH03BMode {
   MODE_QA = 1        // Question & Answer mode
 };
 
+// QA state machine states
+enum QAState {
+  QA_IDLE,
+  QA_WAKE_SENT,
+  QA_READ_SENT,
+  QA_WAITING_SLEEP
+};
+
 class ZH03BSensor : public Component, public uart::UARTDevice {
  public:
   void setup() override;
@@ -51,6 +59,10 @@ class ZH03BSensor : public Component, public uart::UARTDevice {
   // Stabilization tracking
   bool stabilizing_{false};
   uint32_t stabilization_start_{0};
+  
+  // QA mode state machine
+  QAState qa_state_{QA_IDLE};
+  uint32_t qa_timer_{0};
 
   // Header
   static const uint8_t HEADER_BYTE_1 = 0x42;
@@ -61,6 +73,8 @@ class ZH03BSensor : public Component, public uart::UARTDevice {
   static const uint8_t CMD_READ_DATA[9];
   static const uint8_t CMD_SET_QA_MODE[9];
   static const uint8_t CMD_SET_PASSIVE_MODE[9];
+  static const uint8_t CMD_DORMANT_ON[9];
+  static const uint8_t CMD_DORMANT_OFF[9];
 
   // Fungsi internal
   bool validate_checksum_initiative_(const uint8_t *data);
