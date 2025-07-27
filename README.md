@@ -74,7 +74,6 @@ uart:
 sensor:
   - platform: zh03b
     mode: PASSIVE          # Default mode
-    update_interval: 30s   # Not used in passive mode
     pm_1_0:
       name: "PM1.0"
     pm_2_5:
