@@ -7,10 +7,10 @@ namespace zh03b {
 
 static const char *const TAG = "zh03b";
 
-// Q&A mode commands untuk ZH03B
-const uint8_t ZH03BSensor::CMD_READ_DATA[9] = {0x42, 0x4D, 0xE2, 0x00, 0x00, 0x01, 0x71};
-const uint8_t ZH03BSensor::CMD_SET_QA_MODE[9] = {0x42, 0x4D, 0xE1, 0x00, 0x01, 0x01, 0x71};
-const uint8_t ZH03BSensor::CMD_SET_PASSIVE_MODE[9] = {0x42, 0x4D, 0xE1, 0x00, 0x00, 0x01, 0x70};
+// Q&A mode commands untuk ZH03B (5 bytes command data, checksum calculated and sent separately)
+const uint8_t ZH03BSensor::CMD_READ_DATA[5] = {0x42, 0x4D, 0xE2, 0x00, 0x00};
+const uint8_t ZH03BSensor::CMD_SET_QA_MODE[5] = {0x42, 0x4D, 0xE1, 0x00, 0x01};
+const uint8_t ZH03BSensor::CMD_SET_PASSIVE_MODE[5] = {0x42, 0x4D, 0xE1, 0x00, 0x00};
 
 void ZH03BSensor::setup() {
   ESP_LOGCONFIG(TAG, "Setting up ZH03B...");
@@ -146,14 +146,16 @@ void ZH03BSensor::set_passive_mode() {
 }
 
 void ZH03BSensor::send_command_(const uint8_t *command, uint8_t length) {
-  // Hitung checksum
+  // Hitung checksum untuk seluruh command
   uint16_t checksum = 0;
-  for (uint8_t i = 0; i < length - 2; i++) {
+  for (uint8_t i = 0; i < length; i++) {
     checksum += command[i];
   }
   
-  // Kirim command dengan checksum
-  this->write_array(command, length - 2);
+  // Kirim command
+  this->write_array(command, length);
+  
+  // Kirim checksum (2 bytes, big endian)
   this->write_byte((checksum >> 8) & 0xFF);  // High byte
   this->write_byte(checksum & 0xFF);         // Low byte
   
