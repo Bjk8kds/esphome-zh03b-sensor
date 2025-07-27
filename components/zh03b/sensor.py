@@ -32,7 +32,7 @@ CONFIG_SCHEMA = (
         {
             cv.GenerateID(): cv.declare_id(ZH03BSensor),
             cv.Optional(CONF_MODE, default="PASSIVE"): cv.enum(MODES, upper=True),
-            cv.Optional(CONF_UPDATE_INTERVAL, default="30s"): cv.positive_time_period_milliseconds,
+            cv.Optional(CONF_UPDATE_INTERVAL, default="30s"): cv.positive_time_period,
             cv.Optional(CONF_PM_1_0): sensor.sensor_schema(
                 unit_of_measurement=UNIT_MICROGRAMS_PER_CUBIC_METER,
                 icon="mdi:chemical-weapon",
@@ -68,7 +68,7 @@ async def to_code(config):
 
     # Set mode dan update interval
     cg.add(var.set_mode(config[CONF_MODE]))
-    cg.add(var.set_update_interval(config[CONF_UPDATE_INTERVAL]))
+    cg.add(var.set_update_interval(config[CONF_UPDATE_INTERVAL].total_milliseconds))
 
     if CONF_PM_1_0 in config:
         sens = await sensor.new_sensor(config[CONF_PM_1_0])
