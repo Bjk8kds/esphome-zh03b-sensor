@@ -23,11 +23,11 @@ class ZH03BSensor : public Component, public uart::UARTDevice {
   void set_pm_2_5_sensor(sensor::Sensor *pm_2_5_sensor) { pm_2_5_sensor_ = pm_2_5_sensor; }
   void set_pm_10_0_sensor(sensor::Sensor *pm_10_0_sensor) { pm_10_0_sensor_ = pm_10_0_sensor; }
   void set_mode(ZH03BMode mode) { mode_ = mode; }
+  void set_update_interval(uint32_t interval) { update_interval_ = interval; }
   
   void request_reading();
   void set_qa_mode();
   void set_passive_mode();
-  void set_dormant_mode(bool dormant);
 
  protected:
   // Buffer untuk initiative mode (24 bytes)
@@ -43,10 +43,14 @@ class ZH03BSensor : public Component, public uart::UARTDevice {
   sensor::Sensor *pm_10_0_sensor_{nullptr};
 
   ZH03BMode mode_{MODE_PASSIVE};
-  uint32_t update_interval_{30000};  // 30 seconds default
+  uint32_t update_interval_{5000};  // 5 seconds default
   uint32_t last_transmission_{0};
   uint32_t last_request_{0};
   bool waiting_for_response_{false};
+  
+  // Stabilization tracking
+  bool stabilizing_{false};
+  uint32_t stabilization_start_{0};
 
   // Header
   static const uint8_t HEADER_BYTE_1 = 0x42;
@@ -57,8 +61,6 @@ class ZH03BSensor : public Component, public uart::UARTDevice {
   static const uint8_t CMD_READ_DATA[9];
   static const uint8_t CMD_SET_QA_MODE[9];
   static const uint8_t CMD_SET_PASSIVE_MODE[9];
-  static const uint8_t CMD_DORMANT_ON[9];
-  static const uint8_t CMD_DORMANT_OFF[9];
 
   // Fungsi internal
   bool validate_checksum_initiative_(const uint8_t *data);
