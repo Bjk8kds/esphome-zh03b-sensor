@@ -41,7 +41,6 @@ sensor:
   - platform: zh03b
     uart_id: uart_bus
     mode: PASSIVE  # atau QA untuk mode Question & Answer
-    update_interval: 30s
     pm_1_0:
       name: "PM1.0"
       id: pm1
@@ -56,7 +55,6 @@ sensor:
   # - platform: zh03b
   #   uart_id: uart_bus
   #   mode: QA
-  #   update_interval: 60s  # Interval request data
   #   pm_1_0:
   #     name: "PM1.0 QA"
   #   pm_2_5:
