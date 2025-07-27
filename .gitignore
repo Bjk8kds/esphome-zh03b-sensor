@@ -205,3 +205,26 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+# ESPHome specific
+.esphome/
+secrets.yaml
+*.bin
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Documentation build
+docs/_build/
+docs/.doctrees/
+
+# Test files
+test_*.yaml
+*test*.yaml
