@@ -185,9 +185,9 @@ void ZH03BSensor::loop() {
 
 void ZH03BSensor::parse_initiative_data_(const uint8_t *data) {
   // Extract PM values from correct positions (as per manual)
-  uint16_t pm_1_0 = (data[10] << 8) | data[11];
-  uint16_t pm_2_5 = (data[12] << 8) | data[13];
-  uint16_t pm_10_0 = (data[14] << 8) | data[15];
+  uint16_t pm_1_0 = (data[11] << 8) | data[12];
+  uint16_t pm_2_5 = (data[13] << 8) | data[14];
+  uint16_t pm_10_0 = (data[15] << 8) | data[16];
   
   ESP_LOGD(TAG, "Initiative mode - PM1.0: %u, PM2.5: %u, PM10: %u µg/m³", 
            pm_1_0, pm_2_5, pm_10_0);
