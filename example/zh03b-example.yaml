@@ -2,10 +2,6 @@ esphome:
   name: air-quality-monitor
   platform: ESP32
   board: esp32dev
-  includes:
-    - zh03b.h
-  libraries:
-    # Tidak perlu library tambahan
 
 wifi:
   ssid: "YourWiFiSSID"
@@ -21,20 +17,29 @@ ota:
 
 # UART configuration untuk ZH03B
 uart:
+  id: uart_bus
   tx_pin: GPIO17
   rx_pin: GPIO16
   baud_rate: 9600
 
-# Custom sensor component
+# Custom sensor component - Pilih salah satu method di bawah
+
+# Method 1: External Components (GitHub - untuk repo public)
 external_components:
-  - source:
-      type: local
-      path: my_components
+  - source: github://Bjk8kds/esphome-zh03b-sensor
+    components: [ zh03b ]
+
+# Method 2: Local Components (untuk development)
+# external_components:
+#   - source:
+#       type: local
+#       path: components
+#     components: [ zh03b ]
 
 sensor:
   # Mode Passive (default) - sensor mengirim data otomatis
   - platform: zh03b
-    uart_id: uart_0
+    uart_id: uart_bus
     mode: PASSIVE  # atau QA untuk mode Question & Answer
     update_interval: 30s
     pm_1_0:
@@ -49,7 +54,7 @@ sensor:
 
   # Contoh dengan mode Q&A - lebih hemat power
   # - platform: zh03b
-  #   uart_id: uart_0
+  #   uart_id: uart_bus
   #   mode: QA
   #   update_interval: 60s  # Interval request data
   #   pm_1_0:
@@ -58,3 +63,19 @@ sensor:
   #     name: "PM2.5 QA"
   #   pm_10_0:
   #     name: "PM10.0 QA"
+
+# Optional: Advanced configuration
+# logger:
+#   level: DEBUG
+#   logs:
+#     zh03b: DEBUG  # Enable debug untuk troubleshooting
+
+# Optional: Status sensors
+# binary_sensor:
+#   - platform: status
+#     name: "ZH03B Status"
+
+# text_sensor:
+#   - platform: wifi_info
+#     ip_address:
+#       name: "IP Address"
