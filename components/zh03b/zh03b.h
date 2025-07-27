@@ -23,7 +23,6 @@ class ZH03BSensor : public Component, public uart::UARTDevice {
   void set_pm_1_0_sensor(sensor::Sensor *pm_1_0_sensor) { pm_1_0_sensor_ = pm_1_0_sensor; }
   void set_pm_10_0_sensor(sensor::Sensor *pm_10_0_sensor) { pm_10_0_sensor_ = pm_10_0_sensor; }
   void set_mode(ZH03BMode mode) { mode_ = mode; }
-  void set_update_interval(uint32_t interval) { update_interval_ = interval; }
   
   // Getter methods untuk custom sensor
   sensor::Sensor *get_pm_1_0_sensor() { return pm_1_0_sensor_; }
