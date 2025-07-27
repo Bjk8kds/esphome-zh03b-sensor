@@ -86,13 +86,11 @@ void ZH03BSensor::parse_data_(const uint8_t *data) {
   }
   
   // Parse PM values (dalam ug/m3)
-  uint16_t pm_2_5 = (data[4] << 8) | data[5];
-  uint16_t pm_10_0 = (data[6] << 8) | data[7];
-  
-  // ZH03B tidak memberikan PM1.0, jadi kita estimate dari PM2.5
-  uint16_t pm_1_0 = pm_2_5 * 0.8; // Estimasi sederhana
-  
-  ESP_LOGD(TAG, "Received PM2.5: %u ug/m³, PM10: %u ug/m³", pm_2_5, pm_10_0);
+  uint16_t pm_1_0 = (data[6] << 8) | data[7];
+  uint16_t pm_2_5 = (data[2] << 8) | data[3];
+  uint16_t pm_10_0 = (data[4] << 8) | data[5];
+
+  ESP_LOGD(TAG, "Received PM1.0: %u ug/m³, PM2.5: %u ug/m³, PM10: %u ug/m³", pm_1_0, pm_2_5, pm_10_0);
   
   // Publish ke sensor entities
   if (this->pm_1_0_sensor_ != nullptr) {
