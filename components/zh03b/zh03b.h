@@ -57,8 +57,8 @@ class ZH03BSensor : public Component, public uart::UARTDevice {
   static const uint8_t ZH03B_HEADER_BYTE = 0x42;
   static const uint8_t ZH03B_SECOND_BYTE = 0x4D;
   
-  // Q&A mode commands (7 bytes each, checksum calculated separately)
-  static const uint8_t CMD_READ_DATA[7];
-  static const uint8_t CMD_SET_QA_MODE[7];
-  static const uint8_t CMD_SET_PASSIVE_MODE[7];
+  // Q&A mode commands (5 bytes each, checksum calculated separately)
+  static const uint8_t CMD_READ_DATA[5];
+  static const uint8_t CMD_SET_QA_MODE[5];
+  static const uint8_t CMD_SET_PASSIVE_MODE[5];
 };
