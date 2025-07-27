@@ -65,6 +65,11 @@ async def to_code(config):
     await cg.register_component(var, config)
     await uart.register_uart_device(var, config)
 
+    # Set update interval with minimum 30s
+    if CONF_UPDATE_INTERVAL in config:
+        interval = max(30, config[CONF_UPDATE_INTERVAL].total_seconds)
+        cg.add(var.set_update_interval(interval * 1000))
+
     # Set mode
     cg.add(var.set_mode(config[CONF_MODE]))
 
