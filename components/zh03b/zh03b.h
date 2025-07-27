@@ -43,7 +43,7 @@ class ZH03BSensor : public Component, public uart::UARTDevice {
   sensor::Sensor *pm_10_0_sensor_{nullptr};
 
   ZH03BMode mode_{MODE_PASSIVE};
-  uint32_t update_interval_{5000};  // 5 seconds default
+  uint32_t update_interval_{60000};  // 60 seconds default
   uint32_t last_transmission_{0};
   uint32_t last_request_{0};
   bool waiting_for_response_{false};
