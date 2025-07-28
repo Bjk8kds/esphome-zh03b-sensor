@@ -6,7 +6,7 @@
 Custom ESPHome component for the ZH03B laser particulate matter sensor with support for both Initiative Upload (Passive) and Question & Answer (Q&A) modes.
 
 
-> 🟢 **NB**: Example of using lambda directly in yaml (without this custom component), check `example`
+> 🟢 **NB**: Example of using uart debug and commands directly in yaml (without this custom component), please check `example`
 
 ## 🌟 Features
 
