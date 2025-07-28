@@ -24,7 +24,7 @@ Custom ESPHome component for the ZH03B laser particulate matter sensor with supp
 
 ```yaml
 external_components:
-  - source: github://YourGitHubUsername/esphome-zh03b
+  - source: github://Bjk8kds/esphome-zh03b-sensor
     components: [ zh03b ]
 ```
 
