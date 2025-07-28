@@ -27,11 +27,19 @@ MODES = {
     "QA": ZH03BMode.MODE_QA,
 }
 
-CONFIG_SCHEMA = (
+def validate_zh03b_config(config):
+    """Validate that update_interval is only used with Q&A mode"""
+    if config.get(CONF_MODE) == "PASSIVE" and CONF_UPDATE_INTERVAL in config:
+        raise cv.Invalid("update_interval can only be used with Q&A mode. "
+                        "In PASSIVE mode, the sensor sends data automatically every second.")
+    return config
+
+CONFIG_SCHEMA = cv.All(
     cv.Schema(
         {
             cv.GenerateID(): cv.declare_id(ZH03BSensor),
             cv.Optional(CONF_MODE, default="PASSIVE"): cv.enum(MODES, upper=True),
+            cv.Optional(CONF_UPDATE_INTERVAL, default="60s"): cv.positive_time_period_milliseconds,
             cv.Optional(CONF_PM_1_0): sensor.sensor_schema(
                 unit_of_measurement=UNIT_MICROGRAMS_PER_CUBIC_METER,
                 icon="mdi:chemical-weapon",
@@ -56,7 +64,8 @@ CONFIG_SCHEMA = (
         }
     )
     .extend(cv.COMPONENT_SCHEMA)
-    .extend(uart.UART_DEVICE_SCHEMA)
+    .extend(uart.UART_DEVICE_SCHEMA),
+    validate_zh03b_config,
 )
 
 
@@ -65,14 +74,19 @@ async def to_code(config):
     await cg.register_component(var, config)
     await uart.register_uart_device(var, config)
 
-    # Set update interval with minimum 30s
-    if CONF_UPDATE_INTERVAL in config:
-        interval = max(30, config[CONF_UPDATE_INTERVAL].total_seconds)
-        cg.add(var.set_update_interval(interval * 1000))
-
-    # Set mode
+    # Set mode first
     cg.add(var.set_mode(config[CONF_MODE]))
 
+    # Set update interval only for Q&A mode
+    if config[CONF_MODE] == "QA" and CONF_UPDATE_INTERVAL in config:
+        interval = config[CONF_UPDATE_INTERVAL]
+        # Convert to milliseconds and ensure minimum 30s
+        interval_ms = max(30000, int(interval.total_milliseconds))
+        cg.add(var.set_update_interval(interval_ms))
+    elif config[CONF_MODE] == "PASSIVE" and CONF_UPDATE_INTERVAL in config:
+        # Log warning if update_interval is set in passive mode
+        cg.add_build_flag("-DESPHOME_LOG_LEVEL_WARN")
+        
     if CONF_PM_1_0 in config:
         sens = await sensor.new_sensor(config[CONF_PM_1_0])
         cg.add(var.set_pm_1_0_sensor(sens))
