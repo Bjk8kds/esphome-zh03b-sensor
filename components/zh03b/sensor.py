@@ -31,10 +31,13 @@ def validate_update_interval(config):
     """Validate update interval for Q&A mode"""
     if config.get(CONF_MODE) == "QA" and CONF_UPDATE_INTERVAL in config:
         interval = config[CONF_UPDATE_INTERVAL]
-        if interval.total_seconds < 30:
+        # interval is already in milliseconds from cv.positive_time_period_milliseconds
+        if interval < 30000:  # 30 seconds in milliseconds
+            # Convert back to seconds for display
+            interval_seconds = interval / 1000
             raise cv.Invalid(
                 f"update_interval must be at least 30s for Q&A mode. "
-                f"You set {interval.total_seconds}s. "
+                f"You set {interval_seconds}s. "
                 "The sensor needs time to warm up and take accurate readings."
             )
     return config
