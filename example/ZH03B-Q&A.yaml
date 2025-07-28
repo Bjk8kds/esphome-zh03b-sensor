@@ -1,0 +1,76 @@
+esphome:
+  name: air-quality-monitor
+  friendly_name: Air Quality Monitor
+  platform: ESP32
+  board: esp32dev
+  on_boot:
+    # command to enter Q&A mode
+    - uart.write:
+        id: uart_zh03b
+        data: [0xFF, 0x01, 0x78, 0x41, 0x00, 0x00, 0x00, 0x00, 0x46]
+    # enter dormant mode, stop fan
+    - uart.write:
+        id: uart_zh03b
+        data: [0xFF, 0x01, 0xA7, 0x01, 0x00, 0x00, 0x00, 0x00, 0x57]
+
+interval:
+  - interval: 60s
+    then:
+      # exit dormant mode, start fan
+      - uart.write:
+          id: uart_zh03b
+          data: [0xFF, 0x01, 0xA7, 0x00, 0x00, 0x00, 0x00, 0x00, 0x58]
+      - delay: 10s
+      # send question zh03b
+      - uart.write:
+          id: uart_zh03b
+          data: [0xFF, 0x01, 0x86, 0x00, 0x00, 0x00, 0x00, 0x00, 0x79]
+      - delay: 2s
+      # enter dormant mode, stop fan
+      - uart.write:
+          id: uart_zh03b
+          data: [0xFF, 0x01, 0xA7, 0x01, 0x00, 0x00, 0x00, 0x00, 0x57]
+
+sensor:
+  - platform: template
+    name: PM1.0
+    id: pm1_sensor
+    unit_of_measurement: 'µg/m³'
+    accuracy_decimals: 0
+    device_class: volatile_organic_compounds
+    lambda: "return {};"
+
+  - name: PM2.5
+    platform: template
+    id: pm2_5_sensor
+    unit_of_measurement: 'µg/m³'
+    accuracy_decimals: 0
+    device_class: volatile_organic_compounds
+    lambda: "return {};"
+
+  - name: PM10
+    platform: template
+    id: pm10_sensor
+    unit_of_measurement: 'µg/m³'
+    accuracy_decimals: 0
+    device_class: volatile_organic_compounds
+    lambda: "return {};"
+
+uart:
+  - id: uart_zh03b
+    rx_pin: GPIO4
+    tx_pin: GPIO5
+    baud_rate: 9600
+    debug:
+      direction: RX
+      dummy_receiver: true
+      sequence:
+        - lambda: |-
+            UARTDebug::log_hex(direction, bytes,':');  //Log hex data
+            if (bytes.size() == 9 && bytes[0] == 0xFF && bytes[1] == 0x86) {
+              //only update if expected response bytes returned //update using Bitwise style
+              id(pm1_sensor).publish_state((bytes[6] << 8) | bytes[7]);
+              id(pm2_5_sensor).publish_state((bytes[2] << 8) | bytes[3]);
+              id(pm10_sensor).publish_state((bytes[4] << 8) | bytes[5]);
+            }
+

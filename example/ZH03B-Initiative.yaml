@@ -1,0 +1,49 @@
+esphome:
+  name: air-quality-monitor
+  friendly_name: Air Quality Monitor
+  platform: ESP32
+  board: esp32dev
+
+sensor:
+  # ZH03B
+  - platform: template
+    name: PM1.0
+    id: pm1_sensor
+    unit_of_measurement: 'µg/m³'
+    accuracy_decimals: 0
+    device_class: volatile_organic_compounds
+    lambda: "return {};"
+
+  - name: PM2.5
+    platform: template
+    id: pm2_5_sensor
+    unit_of_measurement: 'µg/m³'
+    accuracy_decimals: 0
+    device_class: volatile_organic_compounds
+    lambda: "return {};"
+
+  - name: PM10
+    platform: template
+    id: pm10_sensor
+    unit_of_measurement: 'µg/m³'
+    accuracy_decimals: 0
+    device_class: volatile_organic_compounds
+    lambda: "return {};"
+
+uart:
+  - id: uart_zh03b
+    rx_pin: GPIO4
+    tx_pin: GPIO5
+    baud_rate: 9600
+    debug:
+      direction: RX
+      dummy_receiver: true
+      sequence:
+        - lambda: |-
+            UARTDebug::log_hex(direction, bytes,':');  //Log hex data
+            if (bytes.size() == 24 && bytes[0] == 0x42 && bytes[1] == 0x4D) {
+              //only update if expected response bytes returned //update using Bitwise style
+              id(pm1_sensor).publish_state((bytes[10] << 8) | bytes[11]);
+              id(pm2_5_sensor).publish_state((bytes[12] << 8) | bytes[13]);
+              id(pm10_sensor).publish_state((bytes[14] << 8) | bytes[15]);
+            }
