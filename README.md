@@ -11,7 +11,7 @@ Custom ESPHome component for the ZH03B laser particulate matter sensor with supp
 ## 🌟 Features
 
 - 📊 **PM1.0, PM2.5, and PM10.0** measurements in µg/m³
-- ✅ **Dual Mode Support**: Passive and Q&A modes
+- ✅ **Dual Mode Support**: Initiative (Passive) and Q&A modes
 - 🔋 **Battery-friendly Q&A mode** with configurable intervals
 - 🛡️ **Data validation** with checksum verification
 - 🏠 **Home Assistant** integration ready
@@ -47,7 +47,7 @@ external_components:
 
 ## ⚙️ Configuration
 
-### Basic Setup (Passive Mode)
+### Basic Setup (Initiative / Passive Mode)
 
 ```yaml
 # UART Configuration
