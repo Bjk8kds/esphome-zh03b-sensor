@@ -27,11 +27,16 @@ MODES = {
     "QA": ZH03BMode.MODE_QA,
 }
 
-def validate_zh03b_config(config):
-    """Validate that update_interval is only used with Q&A mode"""
-    if config.get(CONF_MODE) == "PASSIVE" and CONF_UPDATE_INTERVAL in config:
-        raise cv.Invalid("update_interval can only be used with Q&A mode. "
-                        "In PASSIVE mode, the sensor sends data automatically every second.")
+def validate_update_interval(config):
+    """Validate update interval for Q&A mode"""
+    if config.get(CONF_MODE) == "QA" and CONF_UPDATE_INTERVAL in config:
+        interval = config[CONF_UPDATE_INTERVAL]
+        if interval.total_seconds < 30:
+            raise cv.Invalid(
+                f"update_interval must be at least 30s for Q&A mode. "
+                f"You set {interval.total_seconds}s. "
+                "The sensor needs time to warm up and take accurate readings."
+            )
     return config
 
 CONFIG_SCHEMA = cv.All(
@@ -39,7 +44,7 @@ CONFIG_SCHEMA = cv.All(
         {
             cv.GenerateID(): cv.declare_id(ZH03BSensor),
             cv.Optional(CONF_MODE, default="PASSIVE"): cv.enum(MODES, upper=True),
-            cv.Optional(CONF_UPDATE_INTERVAL, default="60s"): cv.positive_time_period_milliseconds,
+            cv.Optional(CONF_UPDATE_INTERVAL): cv.positive_time_period_milliseconds,
             cv.Optional(CONF_PM_1_0): sensor.sensor_schema(
                 unit_of_measurement=UNIT_MICROGRAMS_PER_CUBIC_METER,
                 icon="mdi:chemical-weapon",
@@ -65,7 +70,7 @@ CONFIG_SCHEMA = cv.All(
     )
     .extend(cv.COMPONENT_SCHEMA)
     .extend(uart.UART_DEVICE_SCHEMA),
-    validate_zh03b_config,
+    validate_update_interval,
 )
 
 
@@ -77,15 +82,16 @@ async def to_code(config):
     # Set mode first
     cg.add(var.set_mode(config[CONF_MODE]))
 
-    # Set update interval only for Q&A mode
-    if config[CONF_MODE] == "QA" and CONF_UPDATE_INTERVAL in config:
-        interval = config[CONF_UPDATE_INTERVAL]
-        # Convert to milliseconds and ensure minimum 30s
-        interval_ms = max(30000, int(interval.total_milliseconds))
+    # Handle update interval
+    if config[CONF_MODE] == "QA":
+        # For Q&A mode, use configured interval or default 60s
+        if CONF_UPDATE_INTERVAL in config:
+            interval = config[CONF_UPDATE_INTERVAL]
+        else:
+            interval = 60000  # Default 60 seconds in milliseconds
+        interval_ms = max(30000, int(interval.total_milliseconds if hasattr(interval, 'total_milliseconds') else interval))
         cg.add(var.set_update_interval(interval_ms))
-    elif config[CONF_MODE] == "PASSIVE" and CONF_UPDATE_INTERVAL in config:
-        # Log warning if update_interval is set in passive mode
-        cg.add_build_flag("-DESPHOME_LOG_LEVEL_WARN")
+    # For PASSIVE mode, update_interval is ignored (sensor sends data every second)
         
     if CONF_PM_1_0 in config:
         sens = await sensor.new_sensor(config[CONF_PM_1_0])
