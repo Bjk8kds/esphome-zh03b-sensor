@@ -21,17 +21,17 @@ api:
 ota:
   password: "YourOTAPassword"
 
+# External component from GitHub
+external_components:
+  - source: github://Bjk8kds/esphome-zh03b-sensor
+    components: [ zh03b ]
+
 # UART configuration for ZH03B
 uart:
   id: uart_zh03b
   tx_pin: GPIO17  # Connect to sensor RX (required for Q&A mode)
   rx_pin: GPIO16  # Connect to sensor TX
   baud_rate: 9600
-
-# External component from GitHub
-external_components:
-  - source: github://Bjk8kds/esphome-zh03b-sensor
-    components: [ zh03b ]
 
 # Sensor configurations
 sensor:
