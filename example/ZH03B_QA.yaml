@@ -8,6 +8,7 @@ esphome:
     - uart.write:
         id: uart_zh03b
         data: [0xFF, 0x01, 0x78, 0x41, 0x00, 0x00, 0x00, 0x00, 0x46]
+    - delay: 500ms
     # enter dormant mode, stop fan
     - uart.write:
         id: uart_zh03b
