@@ -59,7 +59,7 @@ sensor:
   - platform: zh03b
     uart_id: uart_zh03b
     mode: QA  # Request data only when needed
-    update_interval: 60s  # Minimum 30s, can use: 30s, 1min, 90s, 2m, etc.
+    update_interval: 60s  # Optional: Minimum 30s, default 60s
     pm_1_0:
       name: "PM1.0 QA"
       id: pm1_qa
