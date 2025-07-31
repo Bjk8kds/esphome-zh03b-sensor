@@ -3,6 +3,16 @@ esphome:
   friendly_name: Air Quality Monitor
   platform: ESP32
   board: esp32dev
+  on_boot:
+    # ensure sensor is in Initiative mode
+    - uart.write:
+        id: uart_ze07
+        data: [0xFF, 0x01, 0x78, 0x40, 0x00, 0x00, 0x00, 0x00, 0x47]
+    - delay: 500ms
+    # ensure exit dormant mode
+    - uart.write:
+        id: uart_ze07
+        data: [0xFF, 0x01, 0xA7, 0x00, 0x00, 0x00, 0x00, 0x00, 0x58]
 
 sensor:
   # ZH03B
