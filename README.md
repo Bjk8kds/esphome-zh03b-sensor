@@ -3,9 +3,9 @@
 [![ESPHome](https://img.shields.io/badge/ESPHome-Compatible-blue.svg)](https://esphome.io/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-ESPHome Custom/External component for Winsen ZH03B laser particulate matter sensor with support for both Initiative Upload (Passive) and Question & Answer (Q&A) modes.
+ESPHome custom/external component for Winsen ZH03B laser particulate matter sensor with support for both Initiative Upload (Passive) and Question & Answer (Q&A) modes.
 
-> 🟢 **NB**: Example of using uart debug and commands directly in yaml (without this custom component), please check `example`
+> 🟢 **NB**: Example of using uart debug and commands directly in yaml (without this custom component), please check [example](example/).
 
 ## 🌟 Features
 
@@ -212,8 +212,9 @@ components/
 [D][zh03b:345]: Q&A mode - PM1.0: 4, PM2.5: 11, PM10: 14 µg/m³
 ```
 
-## 📚 References
+## 📚 Documentation
 
+- [Detailed Examples](example/)
 - [ZH03B Datasheet (PDF)](https://www.winsen-sensor.com/d/files/air-quality/zh03b-laser-dust-module-v2_1(1).pdf)
 - [Winsen Official Website](https://www.winsen-sensor.com/)
 
@@ -228,7 +229,7 @@ Contributions are welcome! Please:
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+MIT License - see [LICENSE](LICENSE) file for details.
 
 ## 🙏 Acknowledgments
 
