@@ -215,7 +215,7 @@ components/
 ## 📚 Documentation
 
 - [Detailed Examples](example/)
-- [ZH03B Datasheet (PDF)](https://www.winsen-sensor.com/d/files/air-quality/zh03b-laser-dust-module-v2_1(1).pdf)
+- [ZH03B Datasheet (PDF)](https://www.winsen-sensor.com/d/files/zh03b-laser-dust-module-v2_1(1).pdf)
 - [Winsen Official Website](https://www.winsen-sensor.com/)
 
 ## 🤝 Contributing
