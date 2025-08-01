@@ -5,7 +5,7 @@
 
 ESPHome custom/external component for Winsen ZH03B laser particulate matter sensor with support for both Initiative Upload (Passive) and Question & Answer (Q&A) modes.
 
-> 🟢 **NB**: Example of using uart debug and commands directly in yaml (without this custom component), please check [example](example/).
+> 🟢 **NB**: Examples of using uart debug and commands directly in yaml (without custom components) are available in the [example](example/) folder.
 
 ## 🌟 Features
 
