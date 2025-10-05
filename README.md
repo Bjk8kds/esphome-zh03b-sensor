@@ -1,7 +1,7 @@
 # ESPHome ZH03B Particulate Matter Sensor
 
 [![ESPHome](https://img.shields.io/badge/ESPHome-Compatible-blue.svg)](https://esphome.io/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![License: MIT](https://img.shields.io/badge/License-MIT-darkred.svg)](https://opensource.org/licenses/MIT)
 
 ESPHome custom/external component for Winsen ZH03B laser particulate matter sensor with support for both Initiative Upload (Passive) and Question & Answer (Q&A) modes.
 
