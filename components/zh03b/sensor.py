@@ -77,6 +77,13 @@ CONFIG_SCHEMA = cv.All(
     validate_update_interval,
 )
 
+FINAL_VALIDATE_SCHEMA = uart.final_validate_device_schema(
+    "zh03b",
+    baud_rate=9600,
+    require_tx=True,
+    require_rx=True,
+)
+
 
 async def to_code(config):
     var = cg.new_Pvariable(config[CONF_ID])
