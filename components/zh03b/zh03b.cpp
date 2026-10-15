@@ -255,7 +255,6 @@ void ZH03BSensor::dump_config() {
   LOG_SENSOR("  ", "PM1.0", this->pm_1_0_sensor_);
   LOG_SENSOR("  ", "PM2.5", this->pm_2_5_sensor_);
   LOG_SENSOR("  ", "PM10.0", this->pm_10_0_sensor_);
-  this->check_uart_settings(9600);
 }
 
 float ZH03BSensor::get_setup_priority() const { 
