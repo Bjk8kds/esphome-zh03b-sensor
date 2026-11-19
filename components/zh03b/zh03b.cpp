@@ -251,7 +251,7 @@ void ZH03BSensor::send_command_(const uint8_t *command, uint8_t length) {
 void ZH03BSensor::dump_config() {
   ESP_LOGCONFIG(TAG, "ZH03B Particulate Matter Sensor:");
   ESP_LOGCONFIG(TAG, "  Mode: %s", this->mode_ == MODE_QA ? "Q&A" : "Passive");
-  ESP_LOGCONFIG(TAG, "  Update Interval: %u ms", this->update_interval_);
+  ESP_LOGCONFIG(TAG, "  Update Interval: %lu ms", this->update_interval_);
   LOG_SENSOR("  ", "PM1.0", this->pm_1_0_sensor_);
   LOG_SENSOR("  ", "PM2.5", this->pm_2_5_sensor_);
   LOG_SENSOR("  ", "PM10.0", this->pm_10_0_sensor_);
